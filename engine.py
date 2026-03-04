@@ -31,7 +31,13 @@ class Value:
         out._backward = backward
 
         return out
-    
+    def relu(self):
+        out = Value(0 if self.data < 0 else self.data, (self,))
+
+        def backward():
+            self.grad += 0 if self.data < 0 else 1 * out.grad
+        out._backward = backward
+        return out
     def __pow__(self, other):
         assert isinstance(other, (int, float)), "only support int and float"
         # other = other if isinstance(other, Value) else Value(other)
